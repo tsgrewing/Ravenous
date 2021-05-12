@@ -4,6 +4,7 @@ import './SearchBar.css';
 class SearchBar extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
           term: '',
           location: '',
@@ -12,8 +13,8 @@ class SearchBar extends React.Component {
 
         this.handleTermChange = this.handleTermChange.bind(this);
         this.handleLocationChange = this.handleLocationChange.bind(this);
-        this.handleSortyByChange = this.handleSortyByChange.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
+
 
         this.sortByOptions = {
             "Best Match": "best_match",
@@ -25,10 +26,11 @@ class SearchBar extends React.Component {
     getSortByClass(sortByOption) {
         if (this.state.sortBy === sortByOption) {
             return 'active';
-        } else {return ''};
+        } 
+        return '';
     };
 
-    handleSortyByChange(sortByOption) {
+    handleSortByChange(sortByOption) {
         this.setState({sortBy: sortByOption});
     };
 
@@ -40,17 +42,22 @@ class SearchBar extends React.Component {
         this.setState({location: e.target.value});
     };
 
+    handleSearch(e) {
+        this.props.searchYelp(this.state.term, this.state.location, this.state.sortBy);
+        
+        e.preventDefault();
+    }
+
     renderSortByOptions() {
         return Object.keys(this.sortByOptions).map(sortByOption => {
             let sortByOptionValue = this.sortByOptions[sortByOption];
-            return <li className={this.getSortByClass(this.sortByOptionValue)} onClick={this.handleSortByChange.bind(this, sortByOptionValue)} key={sortByOptionValue}>{sortByOption}</li>;
+            return (<li className={this.getSortByClass(sortByOptionValue)}
+                        onClick={this.handleSortByChange.bind(this, sortByOptionValue)}
+                        key={sortByOptionValue}>
+                    {sortByOption}
+                    </li>);
         });
     };
-
-    handleSearch(e) {
-        this.props.searchYelp(this.state.term, this.state.location, this.state.sortBy);
-        e.preventDefault();
-    }
 
     render () {
         return (
